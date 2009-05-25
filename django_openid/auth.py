@@ -1,14 +1,12 @@
 from django.http import HttpResponseRedirect as Redirect, Http404
 from django_openid import consumer, signed
+from django_openid.utils import hex_to_int, int_to_hex
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 
 import hashlib, datetime
 from urlparse import urljoin
-
-hex_to_int = lambda s: int(s, 16)
-int_to_hex = lambda i: hex(i).replace('0x', '').lower().replace('l', '')
 
 # TODO: prevent multiple associations of same OpenID
 
@@ -67,8 +65,8 @@ class AuthConsumer(consumer.SessionConsumer):
         )
         
         if self.password_logins_enabled:
-            response.template = self.login_plus_password_template
-            response.context.update({
+            response.template_name = self.login_plus_password_template
+            response.template_context.update({
                 'account_recovery': self.account_recovery_enabled and (
                     self.account_recovery_url or (request.path + 'recover/')
                 ),
