@@ -128,7 +128,7 @@ class RegistrationConsumer(AuthConsumer):
                 on_complete_url = urlparse.urljoin(
                     request.path, '../register_complete/'
                 ),
-                trust_root = urlparse.urljoin(request.path, '..')
+                trust_root = self.trust_root or urlparse.urljoin(request.path, '..')
             )
         
         RegistrationForm = self.get_registration_form_class(request)
