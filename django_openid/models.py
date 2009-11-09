@@ -99,12 +99,12 @@ class DjangoOpenIDStore(OpenIDStore):
     
     def cleanupNonce(self):
         Nonce.objects.filter(
-            timestamp__lt = (int(time.time()) - nonce.SKEW)
+            timestamp__lt = (int(time.time()) - openid.store.nonce.SKEW)
         ).delete()
     
     def cleaupAssociations(self):
         Association.objects.extra(
-            where=['issued + lifetimeint < (%s)' % time.time()]
+            where=['issued + lifetime < (%s)' % time.time()]
         ).delete()
     
     def getAuthKey(self):
