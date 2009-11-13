@@ -7,7 +7,7 @@
 
 <p>Do you wish to associate <strong>{{ specific_openid }}</strong> with your account? This will allow you to sign in as <strong>{{ user }}</strong> using that OpenID.</p>
 
-<form action="{{ action }}" method="post">
+<form action="{{ action }}" method="post">{% csrf_token %}
 <p>
     <input type="hidden" name="openid_token" value="{{ openid_token }}">
 {% if next %}    <input type="hidden" name="next" value="{{ next }}">
