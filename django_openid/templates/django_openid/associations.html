@@ -10,7 +10,7 @@
 {% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
 
 {% for openid in openids %}
-<form action="{{ action }}" method="POST">
+<form action="{{ action }}" method="POST">{% csrf_token %}
     <p>{{ openid.openid }}
         <input type="hidden" name="todelete" value="{{ openid.button }}">
         <input id="delete-{{ forloop.counter }}" type="submit" value="Delete this association">
@@ -20,7 +20,7 @@
 
 <p><strong>Associate a new OpenID:</strong></p>
 
-<form action="{{ action_new }}" method="post">
+<form action="{{ action_new }}" method="post">{% csrf_token %}
 <p>
     <input class="openid" type="text" name="openid_url">
     <input type="hidden" name="next" value="{{ associate_next }}">
