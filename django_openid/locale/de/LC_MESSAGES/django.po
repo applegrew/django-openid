@@ -1,0 +1,286 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Benjamin Wohlwend <piquadrat@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-13 17:46-0600\n"
+"PO-Revision-Date: 2010-01-14 01:16+0100\n"
+"Last-Translator: Benjamin Wohlwend <piquadrat@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: templates/django_openid/admin_login.html:17
+msgid "Log in with your username and password:"
+msgstr "Anmeldung mit Benutzername und Passwort:"
+
+#: templates/django_openid/admin_login.html:20
+msgid "Username:"
+msgstr "Benutzername:"
+
+#: templates/django_openid/admin_login.html:23
+msgid "Password:"
+msgstr "Passwort:"
+
+#: templates/django_openid/admin_login.html:28
+#: templates/django_openid/login_plus_password.html:17
+#: templates/django_openid/login_plus_password.html:30
+msgid "Log in"
+msgstr "Anmeldung"
+
+#: templates/django_openid/admin_login.html:31
+msgid "Or use your OpenID:"
+msgstr "Oder benutzen Sie Ihre OpenID:"
+
+#: templates/django_openid/admin_login.html:34
+msgid "OpenID:"
+msgstr "OpenID:"
+
+#: templates/django_openid/admin_login.html:37
+#: templates/django_openid/login_plus_password.html:39
+msgid "Log in with OpenID"
+msgstr "Anmeldung mit OpenID "
+
+#: templates/django_openid/already_logged_in.html:3
+#: templates/django_openid/already_logged_in.html:6
+msgid "You are already logged in"
+msgstr "Sie sind bereits angemeldet"
+
+#: templates/django_openid/already_logged_in.html:8
+msgid "Log out before trying to log in using another account."
+msgstr "Melden Sie sich ab bevor Sie versuchen, sich mit einem anderen Benutzerkonto anzumelden."
+
+#: templates/django_openid/associate.html:4
+#: templates/django_openid/associate.html:7
+msgid "Associate with your account?"
+msgstr "Mit Ihrem Benutzerkonto assoziieren?"
+
+#: templates/django_openid/associate.html:9
+#, python-format
+msgid "Do you wish to associate <strong>%(specific_openid)s</strong> with your account? This will allow you to sign in as <strong>%(user)s</strong> using that OpenID."
+msgstr ""
+"Wollen Sie <strong>%(specific_openid)s</strong> mit Ihrem Benutzerkonto assoziieren? Dies erlaubt es Ihnen, sich als <strong>%(user)s</strong> per OpenID anzumelden."
+
+#: templates/django_openid/associate.html:14
+#: templates/django_openid/associations.html:28
+msgid "Associate"
+msgstr "Assoziieren"
+
+#: templates/django_openid/associations.html:4
+#: templates/django_openid/associations.html:7
+msgid "Manage your associated OpenIDs"
+msgstr "Bearbeiten Sie Ihre assoziierten OpenIDs"
+
+#: templates/django_openid/associations.html:9
+#, python-format
+msgid "You have %(openids|length)s OpenID%(openids|length|pluralize)s associated with your account."
+msgstr "Sie haben %(openids|length)s OpenID%(openids|length|pluralize)s mit Ihrem Benutzerkonto assoziiert."
+
+#: templates/django_openid/associations.html:17
+msgid "Delete this association"
+msgstr "Diese Assoziierung löschen"
+
+#: templates/django_openid/associations.html:22
+msgid "Associate a new OpenID:"
+msgstr "Eine neue OpenID assoziieren:"
+
+#: templates/django_openid/base.html:5
+msgid "Sign in with your OpenID"
+msgstr "Mit Ihrer OpenID anmelden"
+
+#: templates/django_openid/decide.html:3
+#: templates/django_openid/decide.html:6
+msgid "Sign in?"
+msgstr "Anmelden?"
+
+#: templates/django_openid/decide.html:8
+#, python-format
+msgid "Sign in to <strong>%(trust_root)s</strong> as <strong>%(identity)s</strong>?"
+msgstr "Auf <strong>%(trust_root)s</strong> als <strong>%(identity)s</strong> anmelden?"
+
+#: templates/django_openid/decide.html:13
+msgid "Yes, just this once"
+msgstr "Ja, dieses eine mal"
+
+#: templates/django_openid/decide.html:14
+msgid "Yes, always"
+msgstr "Ja, immer"
+
+#: templates/django_openid/decide.html:16
+msgid "Log in now"
+msgstr "Jetzt anmelden"
+
+#: templates/django_openid/error.html:3
+#: templates/django_openid/error.html:6
+msgid "Error using OpenID"
+msgstr "Fehler beim Benutzen von OpenID"
+
+#: templates/django_openid/landing_page.html:3
+#: templates/django_openid/landing_page.html:6
+msgid "You need to log in"
+msgstr "Sie müssen sich anmelden"
+
+#: templates/django_openid/landing_page.html:8
+msgid "You need to log in to continue."
+msgstr "Sie müssen sich anmelden, um fort zu fahren."
+
+#: templates/django_openid/login.html:3
+#: templates/django_openid/login.html:17
+#: templates/django_openid/login_plus_password.html:3
+msgid "Log in with your OpenID"
+msgstr "Anmelden mit Ihrer OpenID"
+
+#: templates/django_openid/login.html:27
+msgid "Sign in"
+msgstr "Anmelden"
+
+#: templates/django_openid/login_plus_password.html:23
+msgid "With your username and password"
+msgstr "Mit Ihrem Benutzername und Passwort"
+
+#: templates/django_openid/login_plus_password.html:34
+msgid "Or with your OpenID"
+msgstr "Oder mit Ihrer OpenID"
+
+#: templates/django_openid/login_plus_password.html:44
+msgid "Lost your password or can't log in with OpenID?"
+msgstr "Haben Sie Ihr Passwort verloren oder können sich nicht mit OpenID anmelden?"
+
+#: templates/django_openid/login_plus_password.html:44
+#: templates/django_openid/recover.html:3
+msgid "Recover your account"
+msgstr "Zugang wiederherstellen"
+
+#: templates/django_openid/pick_account.html:4
+#: templates/django_openid/pick_account.html:7
+msgid "Which account would you like?"
+msgstr "Welches Benutzerkonto wollen Sie?"
+
+#: templates/django_openid/pick_account.html:9
+#, python-format
+msgid "The OpenID <strong>%(openid)s</strong> is associated with %(users|length)s different accounts. Which user do you wish to sign in as?"
+msgstr "Diese OpenID ist mit <strong>%(openid)s</strong> verschiedenen Benutzerkonten assoziiert. Als welchen Benutzer wollen Sie sich anmelden?"
+
+#: templates/django_openid/recover.html:6
+msgid "Can't log in?"
+msgstr "Können Sie sich nicht anmelden?"
+
+#: templates/django_openid/recover.html:12
+msgid "Enter your username or e-mail address and we'll send you a link to recover your account."
+msgstr "Geben Sie Ihren Benutzernamen oder ihre Email-Adresse ein, wir senden Ihnen dann einen Link, mit dem Sie Ihren Zugang wiederherstellen können."
+
+#: templates/django_openid/recover.html:16
+msgid "Username / E-mail"
+msgstr "Benutzername / Email"
+
+#: templates/django_openid/recover.html:16
+msgid "Recover account"
+msgstr "Zugang "
+
+#: templates/django_openid/recovery_complete.html:4
+#: templates/django_openid/recovery_complete.html:7
+msgid "Account recovered"
+msgstr "Zugang wiederhergestellt"
+
+#: templates/django_openid/recovery_complete.html:9
+#, python-format
+msgid "You are now logged in as <strong>%(user)s</strong>"
+msgstr "Sie sind nun als <strong>%(user)s</strong> angemeldet"
+
+#: templates/django_openid/recovery_complete.html:12
+msgid "Reset your password"
+msgstr "Passwort zurücksetzen"
+
+#: templates/django_openid/recovery_complete.html:13
+msgid "Associate an OpenID with your account"
+msgstr "Eine OpenID mit Ihrem Benutzerkonto assoziieren"
+
+#: templates/django_openid/recovery_expired.html:4
+msgid "Token has expired"
+msgstr "Token ist abgelaufen"
+
+#: templates/django_openid/recovery_expired.html:7
+#, python-format
+msgid "Your account recovery token has expired (tokens are only valid for %(days)s day%(days|pluralize)s). Try <a href=\"%(recover_url)s\">requesting another one</a>."
+msgstr ""
+"Das Token zur Wiederherstellung des Zugangs zu Ihrem Benutzerkonto ist abgelaufen (Tokens sind nur für %(days)s Tag%(days|pluralize:\"e\")s gültig). Versuchen Sie "
+"es mit einem <a href=\"%(recover_url)s\">neuen Token</a>."
+
+#: templates/django_openid/register.html:4
+#: templates/django_openid/register.html:37
+msgid "Register an account"
+msgstr "Benutzerkonto registrieren"
+
+#: templates/django_openid/register.html:43
+msgid "Enter your details"
+msgstr "Angaben zu Ihrer Person"
+
+#: templates/django_openid/register.html:50
+msgid "Since you are using OpenID you don't need to set a password. You can set one later if you want."
+msgstr "Weil Sie OpenID verwenden, müssen Sie kein Passwort angeben. Falls Sie es wünschen, können Sie später ein Passwort angeben."
+
+#: templates/django_openid/register.html:55
+msgid "Register"
+msgstr "Registrieren"
+
+#: templates/django_openid/register.html:57
+#, python-format
+msgid "Your OpenID <strong>%(openid)s</strong> will be associated with this account. (<a href=\"../logout/?next=%(no_thanks)s\">no thanks</a>)"
+msgstr "Ihre OpenID <strong>%(openid)s</strong> wird mit diesem Benutzerkonto assoziiert. (<a href=\"../logout/?next=%(no_thanks)s\">Nein, lieber nicht</a>)"
+
+#: templates/django_openid/register.html:59
+msgid "Or start by entering your OpenID"
+msgstr "Oder beginnen Sie mit der Angabe Ihrer OpenID"
+
+#: templates/django_openid/register.html:61
+msgid "Got an OpenID? Log in with it now:"
+msgstr "Haben Sie eine OpenID? Melden Sie sich damit an:"
+
+#: templates/django_openid/register.html:65
+msgid "Register with OpenID"
+msgstr "Mit OpenID registrieren"
+
+#: templates/django_openid/register_complete.html:4
+msgid "Registration complete"
+msgstr "Registration beendet"
+
+#: templates/django_openid/register_complete.html:7
+msgid "Your account has been created"
+msgstr "Ihr Benutzerkonto wurde erstellt"
+
+#: templates/django_openid/register_complete.html:9
+msgid "You are now logged in."
+msgstr "Sie sind nun angemeldet."
+
+#: templates/django_openid/register_email_sent.html:4
+msgid "Check your e-mail"
+msgstr "Überprüfen Sie Ihr Email-Konto"
+
+#: templates/django_openid/register_email_sent.html:7
+msgid "We have e-mailed you a link to confirm your account."
+msgstr "Wir haben Ihnen einen Link geschickt, um Ihr Benutzerkonto zu aktivieren."
+
+#: templates/django_openid/set_password.html:3
+#: templates/django_openid/set_password.html:36
+msgid "Set a password"
+msgstr "Passwort setzen"
+
+#: templates/django_openid/set_password.html:42
+msgid "You can optionally set a password on your account, to provide an alternative mechanism of logging in."
+msgstr "Sie können optional ein Passwort für Ihr Benutzerkonto setzen, um über eine alternative Anmeldemethode zu verfügen."
+
+#: templates/django_openid/set_password.html:50
+msgid "Set password"
+msgstr "Passwort setzen"
+
+#: templates/django_openid/this_is_an_openid_server.html:4
+#: templates/django_openid/this_is_an_openid_server.html:7
+msgid "This is an OpenID server"
+msgstr "Dies ist ein OpenID-Server"
+
+
