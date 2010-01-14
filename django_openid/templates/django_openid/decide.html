@@ -1,19 +1,19 @@
 {% extends base_template %}
-
-{% block title %}Sign in?{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Sign in?" %}{% endblock %}
 
 {% block content %}
-<h1>Sign in?</h1>
+<h1>{% trans "Sign in?" %}</h1>
 
-<p>Sign in to <strong>{{ trust_root }}</strong> as <strong>{{ identity }}</strong>?</p>
+<p>{% blocktrans %}Sign in to <strong>{{ trust_root }}</strong> as <strong>{{ identity }}</strong>?{% endblocktrans %}</p>
 
 <form action="{{ action }}" method="POST">
     <p>
         {% if save_trusted_roots %}
-        <input type="submit" name="yes_once" value="Yes, just this once">
-        <input type="submit" name="yes_always" value="Yes, always">
+        <input type="submit" name="yes_once" value="{% trans "Yes, just this once" %}">
+        <input type="submit" name="yes_always" value="{% trans "Yes, always" %}>
         {% else %}
-        <input type="submit" name="yes_once" value="Log in now">
+        <input type="submit" name="yes_once" value="{% trans "Log in now" %}">
         {% endif %}
         <input type="hidden" name="_decide" value="1">
         <input type="hidden" name="orequest" value="{{ orequest }}">

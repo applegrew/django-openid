@@ -1,10 +1,11 @@
 {% extends base_template %}
+{% load i18n %}
 
-{% block title %}Registration complete{% endblock %}
+{% block title %}{% trans "Registration complete" %}{% endblock %}
 
 {% block content %}
-<h1>Your account has been created</h1>
+<h1>{% trans "Your account has been created" %}</h1>
 
-<p>You are now logged in.</p>
+<p>{% trans "You are now logged in." %}</p>
 
 {% endblock %}
