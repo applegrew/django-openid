@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.translation import ugettext_lazy, ugettext as _
 
 from django_openid.auth import AuthConsumer
 from django_openid.utils import OpenID, int_to_hex, hex_to_int
@@ -12,10 +13,12 @@ from openid.consumer import consumer
 import urlparse
 
 class RegistrationConsumer(AuthConsumer):
-    already_signed_in_message = 'You are already signed in to this site'
-    unknown_openid_message = \
-        'That OpenID is not recognised. Would you like to create an account?'
-    c_already_confirmed_message = 'Your account is already confirmed'
+    already_signed_in_message = \
+        ugettext_lazy('You are already signed in to this site')
+    unknown_openid_message = ugettext_lazy('That OpenID is not recognised. ' \
+       'Would you like to create an account?')
+    c_already_confirmed_message = \
+        ugettext_lazy('Your account is already confirmed')
     
     register_template = 'django_openid/register.html'
     set_password_template = 'django_openid/set_password.html'
@@ -24,7 +27,7 @@ class RegistrationConsumer(AuthConsumer):
     register_complete_template = 'django_openid/register_complete.html'
     
     after_registration_url = None # None means "show a message instead"
-    unconfirmed_group = 'Unconfirmed users'
+    unconfirmed_group = ugettext_lazy('Unconfirmed users')
     
     # Registration options
     reserved_usernames = ['security', 'info', 'admin']
@@ -32,7 +35,7 @@ class RegistrationConsumer(AuthConsumer):
     confirm_email_addresses = True
     
     confirm_email_from = None # If None, uses settings.DEFAULT_FROM_EMAIL
-    confirm_email_subject = 'Confirm your e-mail address'
+    confirm_email_subject = ugettext_lazy('Confirm your e-mail address')
     confirm_link_secret = None
     confirm_link_salt = 'confirm-link-salt'
     
@@ -66,9 +69,9 @@ class RegistrationConsumer(AuthConsumer):
     
     def show_i_have_logged_you_in(self, request):
         return self.show_message(
-            request, 'You are logged in',
-            'You already have an account for that OpenID. ' + 
-            'You are now logged in.'
+            request, _('You are logged in'),
+            _('You already have an account for that OpenID. ' \
+            'You are now logged in.')
         )
     
     def do_register_complete(self, request):
@@ -260,7 +263,7 @@ class RegistrationConsumer(AuthConsumer):
     def do_password(self, request):
         "Allow users to set a password on their account"
         if request.user.is_anonymous():
-            return self.show_error(request, 'You need to log in first')
+            return self.show_error(request, _('You need to log in first'))
         ChangePasswordForm = self.get_change_password_form_class(request)
         if request.method == 'POST':
             form = ChangePasswordForm(request.user, data=request.POST)
@@ -278,7 +281,7 @@ class RegistrationConsumer(AuthConsumer):
     
     def show_password_has_been_set(self, request):
         return self.show_message(
-            request, 'Password set', 'Your password has been set.'
+            request, _('Password set'), _('Your password has been set.')
         )
     
     def initial_from_sreg(self, sreg):
@@ -320,5 +323,5 @@ class RegistrationConsumer(AuthConsumer):
     
     def show_already_signed_in(self, request):
         return self.show_message(
-            request, 'Already signed in', self.already_signed_in_message
+            request, _('Already signed in'), self.already_signed_in_message
         )
