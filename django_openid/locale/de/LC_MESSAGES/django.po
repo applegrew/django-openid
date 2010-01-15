@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-15 14:02+0100\n"
-"PO-Revision-Date: 2010-01-15 14:03+0100\n"
+"POT-Creation-Date: 2010-01-15 14:42+0100\n"
+"PO-Revision-Date: 2010-01-15 14:46+0100\n"
 "Last-Translator: Benjamin Wohlwend <piquadrat@gmail.com>\n"
-"Language-Team: German\n"
+"Language-Team: German <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -271,7 +271,7 @@ msgstr ""
 "OpenID anzumelden."
 
 #: templates/django_openid/associate.html:14
-#: templates/django_openid/associations.html:28
+#: templates/django_openid/associations.html:30
 msgid "Associate"
 msgstr "Assoziieren"
 
@@ -282,18 +282,16 @@ msgstr "Bearbeiten Sie Ihre assoziierten OpenIDs"
 
 #: templates/django_openid/associations.html:9
 #, python-format
-msgid ""
-"You have %(openids|length)s OpenID%(openids|length|pluralize)s associated "
-"with your account."
-msgstr ""
-"Sie haben %(openids|length)s OpenID%(openids|length|pluralize)s mit Ihrem "
-"Benutzerkonto assoziiert."
+msgid "You have one OpenID associated with your account.\n"
+msgid_plural "You have %(counter)s OpenIDs associated with your account.\n"
+msgstr[0] "Sie haben eine OpenID mit Ihrem Benutzerkonto assoziiert.\n"
+msgstr[1] "Sie haben %(counter)s OpenIDs mit Ihrem Benutzerkonto assoziiert.\n"
 
-#: templates/django_openid/associations.html:17
+#: templates/django_openid/associations.html:19
 msgid "Delete this association"
 msgstr "Diese Assoziierung löschen"
 
-#: templates/django_openid/associations.html:22
+#: templates/django_openid/associations.html:24
 msgid "Associate a new OpenID:"
 msgstr "Eine neue OpenID assoziieren:"
 
@@ -368,10 +366,10 @@ msgstr "Welches Benutzerkonto wollen Sie?"
 #: templates/django_openid/pick_account.html:9
 #, python-format
 msgid ""
-"The OpenID <strong>%(openid)s</strong> is associated with %(users|length)s "
+"The OpenID <strong>%(openid)s</strong> is associated with %(users_length)s "
 "different accounts. Which user do you wish to sign in as?"
 msgstr ""
-"Die OpenID <strong>%(openid)s</strong> ist mit %(users|length)s "
+"Die OpenID <strong>%(openid)s</strong> ist mit %(users_length)s "
 "verschiedenen Benutzerkonten assoziiert. Als welchen Benutzer wollen Sie "
 "sich anmelden?"
 
@@ -515,6 +513,13 @@ msgstr "Passwort setzen"
 #: templates/django_openid/this_is_an_openid_server.html:7
 msgid "This is an OpenID server"
 msgstr "Dies ist ein OpenID-Server"
+
+#~ msgid ""
+#~ "You have %(openids|length)s OpenID%(openids|length|pluralize)s associated "
+#~ "with your account."
+#~ msgstr ""
+#~ "Sie haben %(openids|length)s OpenID%(openids|length|pluralize)s mit Ihrem "
+#~ "Benutzerkonto assoziiert."
 
 #~ msgid "Recover account"
 #~ msgstr "Zugang "

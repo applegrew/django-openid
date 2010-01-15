@@ -6,7 +6,7 @@
 {% block content %}
 <h1>{% trans "Which account would you like?" %}</h1>
 
-<p>{% blocktrans %}The OpenID <strong>{{ openid }}</strong> is associated with {{ users|length }} different accounts. Which user do you wish to sign in as?{% endblocktrans %}</p>
+<p>{% blocktrans with users|length as users_length %}The OpenID <strong>{{ openid }}</strong> is associated with {{ users_length }} different accounts. Which user do you wish to sign in as?{% endblocktrans %}</p>
 
 <form action="{{ action }}" method="POST">
 {% for user in users %}
