@@ -15,11 +15,11 @@ import urlparse
 
 class RegistrationConsumer(AuthConsumer):
     already_signed_in_message = \
-        ugettext_lazy('You are already signed in to this site')
+        ugettext_lazy('You are already signed in to this site.')
     unknown_openid_message = ugettext_lazy('That OpenID is not recognised. ' \
        'Would you like to create an account?')
     c_already_confirmed_message = \
-        ugettext_lazy('Your account is already confirmed')
+        ugettext_lazy('Your account is already confirmed.')
 
     register_template = 'django_openid/register.html'
     set_password_template = 'django_openid/set_password.html'

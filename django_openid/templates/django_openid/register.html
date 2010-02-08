@@ -1,70 +1,51 @@
 {% extends base_template %}
+
 {% load i18n %}
 
-{% block title %}{% trans "Register an account" %}{% endblock %}
-
-{% block extra_head %}
-<style type="text/css">
-input.openid {
-  background: url({{ logo }}) no-repeat;
-  background-position: 0 50%;
-  padding-left: 16px;
-  width: 20em;
-}
-div.field-wrapper {
-    clear: both;
-    margin-bottom: 0.5em;
-    width: 32em;
-}
-.errors input {
-    background-color: pink;
-}
-div.field-wrapper label {
-    width: 9em;
-    float: left;
-    clear: left;
-}
-div.field-wrapper input {
-    width: 20em;
-}
-input#id_username {
-    width: 12em;
-}
-</style>
-{% endblock %}
+{% block title %}{% trans "Create an Account" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Register an account" %}</h1>
+
+<h1>{% trans "Create an Account" %}</h1>
 
 {% if message %}
-<p>{{ message }}</p>
+    <p>{{ message }}</p>
 {% endif %}
 
-<h2>{% trans "Enter your details" %}</h2>
-<form action="{{ action }}" method="post">{% csrf_token %}
-{% with form.username as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-{% with form.first_name as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-{% with form.last_name as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-{% with form.email as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-{% if openid %}
-<p>{% trans "Since you are using OpenID you don't need to set a password. You can set one later if you want." %}</p>
+{% if not openid %}
+    <p>{% blocktrans %}Do you have an <a href="http://openid.net/" rel="external">OpenID</a>? Try our <a href="#openid">OpenID registration</a>!{% endblocktrans %}</p>
 {% endif %}
-{% with form.password as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-{% with form.password2 as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-<p><input type="submit" value="{% trans "Register" %}"></p>
+
+<h2>{% trans "Required information" %}</h2>
+
 {% if openid %}
-    <p>{% blocktrans %}Your OpenID <strong>{{ openid }}</strong> will be associated with this account. (<a href="../logout/?next={{ no_thanks }}">no thanks</a>){% endblocktrans %}</p>
-{% else %}
-<h2>{% trans "Or start by entering your OpenID" %}</h2>
-<form action="{{ action }}" method="post">{% csrf_token %}
-    <p><label for="openid_url">{% trans "Got an OpenID? Log in with it now:" %}</label>
-        <input type="text" class="openid" name="openid_url" id="openid_url">
-    </p>
-    <p>
-        <input type="submit" value="{% trans "Register with OpenID" %}">
-    </p>
-</form>
+    <p>{% blocktrans %}Your OpenID <strong>{{ openid }}</strong> will be associated with this account.{% endblocktrans %} (<a href="{% url openid-logout %}?next={{ no_thanks }}">{% trans "no thanks" %}</a>)</p>
 {% endif %}
+
+<form method="post" action="{{ action }}">{% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+
+    {% if openid %}
+        <p>{% trans "Since you are using OpenID you don't need to set a password. You can set one later if you change your mind." %}</p>
+    {% endif %}
+
+    <p><input type="submit" value="{% trans "Create my Account" %}" /></p>
 </form>
+
+{% if not openid %}
+    <form method="post" action="{{ action }}">{% csrf_token %}
+        <h2 id="openid">{% trans "Use OpenID to create your Account" %}</h2>
+
+        <p>
+            <label for="openid_url">{% trans "Got an OpenID? Log in with it now:" %}</label>
+            <input type="text" class="openid" name="openid_url" id="openid_url" />
+        </p>
+        <p>
+            <input type="submit" value="{% trans "Register with OpenID" %}" />
+        </p>
+    </form>
+{% endif %}
 
 {% endblock %}
