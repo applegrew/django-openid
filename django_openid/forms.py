@@ -13,7 +13,7 @@ class RegistrationForm(forms.ModelForm):
     username_re = re.compile('^[a-zA-Z0-9]+$')
 
     # Additional required fields (above what the User model says)
-    extra_required = ('first_name', 'last_name', 'email')
+    extra_required = ('email', )
 
     def __init__(self, *args, **kwargs):
         """
@@ -45,7 +45,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('username', 'email', 'password')
 
     password = forms.CharField(
         widget = forms.PasswordInput,
