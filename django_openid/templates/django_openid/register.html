@@ -5,7 +5,7 @@
 {% block extra_head %}
 <style type="text/css">
 input.openid {
-  background: url({{ logo }}) no-repeat; 
+  background: url({{ logo }}) no-repeat;
   background-position: 0 50%;
   padding-left: 16px;
   width: 20em;
@@ -47,10 +47,9 @@ input#id_username {
 {% with form.email as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% if openid %}
 <p>Since you are using OpenID you don't need to set a password. You can set one later if you want.</p>
-{% else %}
+{% endif %}
 {% with form.password as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% with form.password2 as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-{% endif %}
 <p><input type="submit" value="Register"></p>
 {% if openid %}
     <p>Your OpenID <strong>{{ openid }}</strong> will be associated with this account. (<a href="../logout/?next={{ no_thanks }}">no thanks</a>)</p>
