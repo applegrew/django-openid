@@ -20,7 +20,7 @@ input.openid {
 <p>{{ message }}</p>
 {% endif %}
 
-<form action="{{ action }}" method="post">
+<form action="{{ action }}" method="post">{% csrf_token %}
 <p>
     <input class="openid" type="text" name="openid_url">
 {% if next %}    <input type="hidden" name="next" value="{{ next }}">
