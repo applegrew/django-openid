@@ -1,6 +1,6 @@
 {% extends base_template %}
-
-{% block title %}Log in with your OpenID{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Log in with your OpenID" %}{% endblock %}
 
 {% block extra_head %}
 <style type="text/css">
@@ -14,7 +14,7 @@ input.openid {
 {% endblock %}
 
 {% block content %}
-<h1>Log in with your OpenID</h1>
+<h1>{% trans "Log in with your OpenID" %}</h1>
 
 {% if message %}
 <p>{{ message }}</p>
@@ -24,7 +24,7 @@ input.openid {
 <p>
     <input class="openid" type="text" name="openid_url">
 {% if next %}    <input type="hidden" name="next" value="{{ next }}">
-{% endif %}    <input type="submit" value="Sign in">
+{% endif %}    <input type="submit" value="{% trans "Sign in" %}">
 </p>
 </form>
 {% endblock %}

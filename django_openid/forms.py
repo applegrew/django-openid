@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django import forms
+from django.utils.translation import ugettext_lazy
 
 import re
 
 class RegistrationForm(forms.ModelForm):
-    no_password_error = 'You must either set a password or attach an OpenID'
-    invalid_username_error = 'Usernames must consist of letters and numbers'
-    reserved_username_error = 'That username cannot be registered'
-    duplicate_email_error = 'That e-mail address is already in use'
+    no_password_error = ugettext_lazy('You must either set a password or ' \
+                                      'attach an OpenID')
+    invalid_username_error = ugettext_lazy('Usernames must consist of ' \
+                                           'letters and numbers')
+    reserved_username_error = \
+        ugettext_lazy('That username cannot be registered')
+    duplicate_email_error = \
+        ugettext_lazy('That e-mail address is already in use')
 
     username_re = re.compile('^[a-zA-Z0-9]+$')
 
@@ -75,11 +80,11 @@ class RegistrationForm(forms.ModelForm):
         return email
 
 class RegistrationFormPasswordConfirm(RegistrationForm):
-    password_mismatch_error = 'Your passwords do not match'
+    password_mismatch_error = ugettext_lazy('Your passwords do not match')
 
     password2 = forms.CharField(
         widget = forms.PasswordInput,
-        label = "Confirm password"
+        label = ugettext_lazy("Confirm password")
     )
 
     def clean_password2(self):
@@ -97,9 +102,9 @@ class ChangePasswordForm(forms.Form):
     password2 = forms.CharField(
         widget = forms.PasswordInput,
         required = True,
-        label = 'Confirm password'
+        label = ugettext_lazy('Confirm password')
     )
-    password_mismatch_error = 'Your passwords do not match'
+    password_mismatch_error = ugettext_lazy('Your passwords do not match')
 
     def __init__(self, user, *args, **kwargs):
         self.user = user

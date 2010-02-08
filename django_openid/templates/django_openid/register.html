@@ -1,6 +1,7 @@
 {% extends base_template %}
+{% load i18n %}
 
-{% block title %}Register an account{% endblock %}
+{% block title %}{% trans "Register an account" %}{% endblock %}
 
 {% block extra_head %}
 <style type="text/css">
@@ -33,34 +34,34 @@ input#id_username {
 {% endblock %}
 
 {% block content %}
-<h1>Register an account</h1>
+<h1>{% trans "Register an account" %}</h1>
 
 {% if message %}
 <p>{{ message }}</p>
 {% endif %}
 
-<h2>Enter your details</h2>
+<h2>{% trans "Enter your details" %}</h2>
 <form action="{{ action }}" method="post">
 {% with form.username as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% with form.first_name as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% with form.last_name as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% with form.email as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% if openid %}
-<p>Since you are using OpenID you don't need to set a password. You can set one later if you want.</p>
+<p>{% trans "Since you are using OpenID you don't need to set a password. You can set one later if you want." %}</p>
 {% endif %}
 {% with form.password as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
 {% with form.password2 as field %}{% include "django_openid/_register_form_field.html" %}{% endwith %}
-<p><input type="submit" value="Register"></p>
+<p><input type="submit" value="{% trans "Register" %}"></p>
 {% if openid %}
-    <p>Your OpenID <strong>{{ openid }}</strong> will be associated with this account. (<a href="../logout/?next={{ no_thanks }}">no thanks</a>)</p>
+    <p>{% blocktrans %}Your OpenID <strong>{{ openid }}</strong> will be associated with this account. (<a href="../logout/?next={{ no_thanks }}">no thanks</a>){% endblocktrans %}</p>
 {% else %}
-<h2>Or start by entering your OpenID</h2>
+<h2>{% trans "Or start by entering your OpenID" %}</h2>
 <form action="{{ action }}" method="post">
-    <p><label for="openid_url">Got an OpenID? Log in with it now:</label>
+    <p><label for="openid_url">{% trans "Got an OpenID? Log in with it now:" %}</label>
         <input type="text" class="openid" name="openid_url" id="openid_url">
     </p>
     <p>
-        <input type="submit" value="Register with OpenID">
+        <input type="submit" value="{% trans "Register with OpenID" %}">
     </p>
 </form>
 {% endif %}

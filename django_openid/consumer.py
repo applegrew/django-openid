@@ -19,6 +19,7 @@ from django_openid.models import DjangoOpenIDStore
 from django_openid.utils import OpenID, Router
 from django_openid import signed
 from django_openid.response import TemplateResponse
+from django.utils.translation import ugettext_lazy, ugettext as _
 
 class SessionPersist(object):
     def get_user_session(self, request):
@@ -89,12 +90,12 @@ class Consumer(object):
     sreg_policy_url = None
     
     # Default messages
-    openid_required_message = 'Enter an OpenID'
-    xri_disabled_message = 'i-names are not supported'
-    openid_invalid_message = 'The OpenID was invalid'
-    request_cancelled_message = 'The request was cancelled'
-    failure_message = 'Failure: %s'
-    setup_needed_message = 'Setup needed'
+    openid_required_message = ugettext_lazy('Enter an OpenID')
+    xri_disabled_message = ugettext_lazy('i-names are not supported')
+    openid_invalid_message = ugettext_lazy('The OpenID was invalid')
+    request_cancelled_message = ugettext_lazy('The request was cancelled')
+    failure_message = ugettext_lazy('Failure: %s')
+    setup_needed_message = ugettext_lazy('Setup needed')
     
     sign_next_param = True # Set to False to disable signed ?next= URLs
     salt_next = 'salt-next-token' # Adds extra saltiness to the ?next= salt
@@ -332,7 +333,7 @@ Fzk0lpcjIQA7""".strip()
         response = self.redirect_if_valid_next(request)
         if not response:
             response = self.show_message(
-                request, 'Logged in', "You logged in as %s" % identity_url
+                request, _('Logged in'), _("You logged in as %s") % identity_url
             )
         return response
     

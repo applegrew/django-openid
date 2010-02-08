@@ -4,6 +4,7 @@ from django_openid.utils import hex_to_int, int_to_hex
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
+from django.utils.translation import ugettext_lazy, ugettext as _
 
 import datetime
 from urlparse import urljoin
@@ -29,24 +30,26 @@ class AuthConsumer(consumer.SessionConsumer):
     recovery_complete_template = 'django_openid/recovery_complete.html'
     
     recovery_email_from = None
-    recovery_email_subject = 'Recover your account'
+    recovery_email_subject = ugettext_lazy('Recover your account')
     
     password_logins_enabled = True
     account_recovery_enabled = True
     
-    need_authenticated_user_message = 'You need to sign in with an ' \
-        'existing user account to access this page.'
-    csrf_failed_message = 'Invalid submission'
-    associate_tampering_message = 'Invalid submission'
-    association_deleted_message = '%s has been deleted'
+    need_authenticated_user_message = ugettext_lazy('You need to sign in ' \
+        'with an existing user account to access this page.')
+    csrf_failed_message = ugettext_lazy('Invalid submission')
+    associate_tampering_message = ugettext_lazy('Invalid submission')
+    association_deleted_message = ugettext_lazy('%s has been deleted')
     openid_now_associated_message = \
-        'The OpenID "%s" is now associated with your account.'
-    bad_password_message = 'Incorrect username or password'
-    invalid_token_message = 'Invalid token'
-    recovery_email_sent_message = 'Check your mail for further instructions'
-    recovery_not_found_message = 'No matching user was found'
-    recovery_multiple_found_message = 'Try entering your username instead'
-    r_user_not_found_message = 'That user account does not exist'
+        ugettext_lazy('The OpenID "%s" is now associated with your account.')
+    bad_password_message = ugettext_lazy('Incorrect username or password')
+    invalid_token_message = ugettext_lazy('Invalid token')
+    recovery_email_sent_message = \
+        ugettext_lazy('Check your mail for further instructions')
+    recovery_not_found_message = ugettext_lazy('No matching user was found')
+    recovery_multiple_found_message = \
+        ugettext_lazy('Try entering your username instead')
+    r_user_not_found_message = ugettext_lazy('That user account does not exist')
     
     account_recovery_url = None
     
@@ -170,7 +173,7 @@ class AuthConsumer(consumer.SessionConsumer):
         # with the selected account. The error messages in here are a bit 
         # weird, unfortunately.
         if not request.openid:
-            return self.show_error(request, 'You should be logged in here')
+            return self.show_error(request, _('You should be logged in here'))
         users = self.lookup_openid(request, request.openid.openid)
         try:
             user_id = [
@@ -178,7 +181,7 @@ class AuthConsumer(consumer.SessionConsumer):
             ][0]
             user = [u for u in users if str(u.id) == user_id][0]
         except IndexError, e:
-            return self.show_error(request, "You didn't pick a valid user")
+            return self.show_error(request, _("You didn't pick a valid user"))
         # OK, log them in
         self.log_in_user(request, user)
         return self.on_login_complete(request, user, request.openid.openid)
@@ -193,13 +196,13 @@ class AuthConsumer(consumer.SessionConsumer):
     def show_unknown_openid(self, request, openid):
         # This can be over-ridden to show a registration form
         return self.show_message(
-            request, 'Unknown OpenID', '%s is an unknown OpenID' % openid
+            request, _('Unknown OpenID'), _('%s is an unknown OpenID') % openid
         )
     
     def show_you_cannot_login(self, request, user, openid):
         return self.show_message(
-            request, 'You cannot log in',
-            'You cannot log in with that account'
+            request, _('You cannot log in'),
+            _('You cannot log in with that account')
         )
     
     def show_associate(self, request, openid=None):
@@ -236,7 +239,7 @@ class AuthConsumer(consumer.SessionConsumer):
     def show_associate_done(self, request, openid):
         response = self.redirect_if_valid_next(request)
         if not response:
-            response = self.show_message(request, 'Associated', 
+            response = self.show_message(request, _('Associated'), 
                 self.openid_now_associated_message % openid
             )
         return response
@@ -306,7 +309,7 @@ class AuthConsumer(consumer.SessionConsumer):
             if user:
                 self.send_recovery_email(request, user)
                 return self.show_message(
-                    request, 'E-mail sent', self.recovery_email_sent_message
+                    request, _('E-mail sent'), self.recovery_email_sent_message
                 )
             else:
                 extra_message = self.recovery_not_found_message
