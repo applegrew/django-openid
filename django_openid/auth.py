@@ -78,6 +78,7 @@ class AuthConsumer(consumer.SessionConsumer):
                     self.account_recovery_url or (request.path + 'recover/')
                 ),
             })
+        response.force_bake()
         return response
 
     def show_already_logged_in(self, request):
