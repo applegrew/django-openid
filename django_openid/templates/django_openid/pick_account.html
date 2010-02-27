@@ -1,17 +1,21 @@
 {% extends base_template %}
+
 {% load i18n %}
 
 {% block title %}{% trans "Which account would you like?" %}{% endblock %}
 
 {% block content %}
+
 <h1>{% trans "Which account would you like?" %}</h1>
 
-<p>{% blocktrans with users|length as users_length %}The OpenID <strong>{{ openid }}</strong> is associated with {{ users_length }} different accounts. Which user do you wish to sign in as?{% endblocktrans %}</p>
+<p>
+    {% blocktrans with users|length as users_length %}The OpenID <strong>{{ openid }}</strong> is associated with {{ users_length }} different accounts. Which user do you wish to sign in as?{% endblocktrans %}
+</p>
 
 <form action="{{ action }}" method="POST">
-{% for user in users %}
-    <p><input type="submit" name="user-{{ user.id }}" value="{{ user }}"></p>
-{% endfor %}
+    {% for user in users %}
+        <p><input type="submit" name="user-{{ user.id }}" value="{{ user }}"></p>
+    {% endfor %}
 </form>
 
 {% endblock %}

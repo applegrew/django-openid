@@ -1,19 +1,23 @@
 {% extends base_template %}
+
 {% load i18n %}
+
 {% block title %}{% trans "Recover your account" %}{% endblock %}
 
 {% block content %}
+
 <h1>{% trans "Can't log in?" %}</h1>
 
 {% if message %}
-<p>{{ message }}</p>
+    <p class="message">{{ message }}</p>
 {% endif %}
 
 <p>{% trans "Enter your username or e-mail address and we'll send you a link to recover your account." %}</p>
 
 <form action="{{ action }}" method="post">{% csrf_token %}
-<p>
-    <label for="id_recover">{% trans "Username / E-mail" %}:</label> <input id="id_recover" type="text" name="recover"> <input type="submit" value="{% trans "Recover your account" %}">
-</p>
+    <p>
+        <label for="id_recover">{% trans "Username / E-mail" %}:</label> <input id="id_recover" type="text" name="recover"> <input type="submit" value="{% trans "Recover your account" %}">
+    </p>
 </form>
+
 {% endblock %}

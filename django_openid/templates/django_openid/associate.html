@@ -1,9 +1,11 @@
 {% extends base_template %}
+
 {% load i18n %}
 
 {% block title %}{% trans "Associate with your account?" %}{% endblock %}
 
 {% block content %}
+
 <h1>{% trans "Associate with your account?" %}</h1>
 
 <p>{% blocktrans %}Do you wish to associate <strong>{{ specific_openid }}</strong> with your account? This will allow you to sign in as <strong>{{ user }}</strong> using that OpenID.{% endblocktrans %}</p>
@@ -14,4 +16,5 @@
     <input type="submit" value="{% trans "Associate" %}">
 </p>
 </form>
+
 {% endblock %}

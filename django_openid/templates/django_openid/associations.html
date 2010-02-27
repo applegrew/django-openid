@@ -18,7 +18,9 @@
     {% endblocktrans %}
 </p>
 
-{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
+{% if message %}
+    <p class="message">{{ message }}</p>
+{% endif %}
 
 {% if openids %}
 <ul>
