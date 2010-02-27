@@ -38,19 +38,19 @@ class AuthConsumer(consumer.SessionConsumer):
 
     need_authenticated_user_message = ugettext_lazy('You need to sign in ' \
         'with an existing user account to access this page.')
-    csrf_failed_message = ugettext_lazy('Invalid submission')
-    associate_tampering_message = ugettext_lazy('Invalid submission')
-    association_deleted_message = ugettext_lazy('%s has been deleted')
+    csrf_failed_message = ugettext_lazy('Invalid submission.')
+    associate_tampering_message = ugettext_lazy('Invalid submission.')
+    association_deleted_message = ugettext_lazy('%s has been deleted.')
     openid_now_associated_message = \
         ugettext_lazy('The OpenID "%s" is now associated with your account.')
-    bad_password_message = ugettext_lazy('Incorrect username or password')
-    invalid_token_message = ugettext_lazy('Invalid token')
+    bad_password_message = ugettext_lazy('Incorrect username or password.')
+    invalid_token_message = ugettext_lazy('Invalid token.')
     recovery_email_sent_message = \
-        ugettext_lazy('Check your mail for further instructions')
-    recovery_not_found_message = ugettext_lazy('No matching user was found')
+        ugettext_lazy('Check your mail for further instructions.')
+    recovery_not_found_message = ugettext_lazy('No matching user was found.')
     recovery_multiple_found_message = \
-        ugettext_lazy('Try entering your username instead')
-    r_user_not_found_message = ugettext_lazy('That user account does not exist')
+        ugettext_lazy('Try entering your username instead.')
+    r_user_not_found_message = ugettext_lazy('That user account does not exist.')
 
     account_recovery_url = None
 
@@ -295,6 +295,7 @@ class AuthConsumer(consumer.SessionConsumer):
             'openids': openids,
             'user': request.user,
             'action': request.path,
+            'logo': self.logo_path or (request.path + '../logo/'),
             'message': message,
             'action_new': '../',
             'associate_next': self.sign_next(request.path),

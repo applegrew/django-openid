@@ -1,34 +1,49 @@
 {% extends base_template %}
+
 {% load i18n %}
 
 {% block title %}{% trans "Manage your associated OpenIDs" %}{% endblock %}
 
 {% block content %}
+
 <h1>{% trans "Manage your associated OpenIDs" %}</h1>
 
-<p>{% blocktrans count openids|length as counter %}You have one OpenID associated with your account.
-{% plural %}You have {{ counter }} OpenIDs associated with your account.
-{% endblocktrans %}</p>
+<h2>{% trans "Associated OpenIDs" %}</h2>
+
+<p>
+    {% blocktrans count openids|length as counter %}
+        You have one OpenID associated with your account.
+        {% plural %}
+        You have {{ counter }} OpenIDs associated with your account.
+    {% endblocktrans %}
+</p>
 
 {% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
 
-{% for openid in openids %}
-<form action="{{ action }}" method="POST">{% csrf_token %}
-    <p>{{ openid.openid }}
-        <input type="hidden" name="todelete" value="{{ openid.button }}">
-        <input id="delete-{{ forloop.counter }}" type="submit" value="{% trans "Delete this association" %}">
-    </p>
-</form>
-{% endfor %}
+{% if openids %}
+<ul>
+    {% for openid in openids %}
+        <li>
+            <form action="{{ action }}" method="post">{% csrf_token %}
+                <p>
+                    {{ openid.openid }}
+                    <input type="submit" id="delete-{{ forloop.counter }}" value="{% trans "Delete this association" %}" />
+                    <input type="hidden" name="todelete" value="{{ openid.button }}" />
+                </p>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
 
-<p><strong>{% trans "Associate a new OpenID:" %}</strong></p>
+<h2>{% trans "Associate a new OpenID" %}</h2>
 
 <form action="{{ action_new }}" method="post">{% csrf_token %}
-<p>
-    <input class="openid" type="text" name="openid_url">
-    <input type="hidden" name="next" value="{{ associate_next }}">
-    <input type="submit" value="{% trans "Associate" %}">
-</p>
+    <p>
+        <input class="openid" type="text" name="openid_url" />
+        <input type="hidden" name="next" value="{{ associate_next }}" />
+        <input type="submit" value="{% trans "Associate" %}" />
+    </p>
 </form>
 
 {% endblock %}

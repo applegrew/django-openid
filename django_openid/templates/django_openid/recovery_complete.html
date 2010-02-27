@@ -1,15 +1,18 @@
 {% extends base_template %}
+
 {% load i18n %}
 
 {% block title %}{% trans "Account recovered" %}{% endblock %}
 
 {% block content %}
-<h2>{% trans "Account recovered" %}</h2>
 
-<p>{% blocktrans %}You are now logged in as <strong>{{ user }}</strong>{% endblocktrans %}</p>
+<h1>{% trans "Account recovered" %}</h1>
+
+<p>{% blocktrans %}You are now logged in as <strong>{{ user }}</strong>.{% endblocktrans %}</p>
 
 <ul>
-    <li><a href="{{ change_password_url }}">{% trans "Reset your password" %}</a></li>
+    <li><a href="{{ change_password_url }}">{% trans "Reset your password" %}</a> {% trans "or" %}</li>
     <li><a href="{{ associate_url }}">{% trans "Associate an OpenID with your account" %}</a></li>
 </ul>
+
 {% endblock %}
