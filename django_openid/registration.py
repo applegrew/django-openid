@@ -72,7 +72,7 @@ class RegistrationConsumer(AuthConsumer):
 
     def show_i_have_logged_you_in(self, request):
         return self.show_message(
-            request, _('You are logged in'),
+            request, _('This OpenID is already associated with your account'),
             _('You already have an account for that OpenID. ' \
             'You are now logged in.')
         )

@@ -138,20 +138,24 @@ class AuthConsumer(consumer.SessionConsumer):
                 # Offer to associate this OpenID with their account
                 return self.show_associate(request, openid)
         if matches:
-            # If there's only one match, log them in as that user
-            if len(matches) == 1:
-                user = matches[0]
-                if self.user_can_login(request, user):
-                    self.log_in_user(request, user)
-                    return self.on_login_complete(request, user, openid)
-                else:
-                    # User is not allowed to log in for some other reason -
-                    # for example, they have not yet validated their e-mail
-                    # or they have been banned from the site.
-                    return self.show_you_cannot_login(request, user, openid)
-            # Otherwise, let them to pick which account they want to log in as
+            # Check which accounts are active
+            active_matches = []
+            for match in matches:
+                if self.user_can_login(request, match):
+                    active_matches.append(match)
+            if len(active_matches) == 0:
+                # User is not allowed to log in for some other reason -
+                # for example, they have not yet validated their e-mail
+                # or they have been banned from the site.
+                return self.show_you_cannot_login(request, openid)
+            elif len(active_matches) == 1:
+                # If there's only one match, log them in as that user
+                user = active_matches[0]
+                self.log_in_user(request, user)
+                return self.on_login_complete(request, user, openid)
             else:
-                return self.show_pick_account(request, openid)
+                # Otherwise, let them to pick which account they want to log in as
+                return self.show_pick_account(request, openid, active_matches)
         else:
             # We don't know anything about this openid
             return self.show_unknown_openid(request, openid)
@@ -160,7 +164,7 @@ class AuthConsumer(consumer.SessionConsumer):
         "Over-ride for things like user bans or account e-mail validation"
         return user.is_active
 
-    def show_pick_account(self, request, openid):
+    def show_pick_account(self, request, openid, users):
         """
         The user's OpenID is associated with more than one account - ask them
         which one they would like to sign in as
@@ -168,7 +172,7 @@ class AuthConsumer(consumer.SessionConsumer):
         return self.render(request, self.pick_account_template, {
             'action': urljoin(request.path, '../pick/'),
             'openid': openid,
-            'users': self.lookup_openid(request, openid),
+            'users': users,
         })
 
     def do_pick(self, request):
@@ -202,10 +206,10 @@ class AuthConsumer(consumer.SessionConsumer):
             request, _('Unknown OpenID'), _('%s is an unknown OpenID') % openid
         )
 
-    def show_you_cannot_login(self, request, user, openid):
+    def show_you_cannot_login(self, request, openid):
         return self.show_message(
             request, _('You cannot log in'),
-            _('You cannot log in with that account')
+            _('You cannot log in with that account.')
         )
 
     def show_associate(self, request, openid=None):
