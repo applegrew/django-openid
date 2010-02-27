@@ -51,6 +51,8 @@ class AuthConsumer(consumer.SessionConsumer):
     recovery_multiple_found_message = \
         ugettext_lazy('Try entering your username instead.')
     r_user_not_found_message = ugettext_lazy('That user account does not exist.')
+    recovery_cannot_login_message = _('That user account cannot be recovered.')
+    cannot_login_explanation = _('User account is probably inactive.') + ' ' + _('Please use your activation link or contact an administrator.')
 
     account_recovery_url = None
 
@@ -95,7 +97,7 @@ class AuthConsumer(consumer.SessionConsumer):
             if not user:
                 return self.show_login(request, self.bad_password_message)
             elif not user.is_active:
-                return self.show_login(request, _("This account is inactive."))
+                return self.show_you_cannot_login(request)
             else:
                 self.log_in_user(request, user)
                 return self.on_login_complete(request, user, openid=None)
@@ -207,10 +209,10 @@ class AuthConsumer(consumer.SessionConsumer):
             request, _('Unknown OpenID'), _('%s is an unknown OpenID') % openid
         )
 
-    def show_you_cannot_login(self, request, openid):
+    def show_you_cannot_login(self, request, openid = None):
         return self.show_message(
             request, _('You cannot log in'),
-            _('You cannot log in with that account.')
+            _('You cannot log in with that account.') + self.cannot_login_explanation
         )
 
     def show_associate(self, request, openid=None):
@@ -316,10 +318,13 @@ class AuthConsumer(consumer.SessionConsumer):
                     else:
                         user = users[0]
             if user:
-                self.send_recovery_email(request, user)
-                return self.show_message(
-                    request, _('E-mail sent'), self.recovery_email_sent_message
-                )
+                if self.user_can_login(request, user):
+                    self.send_recovery_email(request, user)
+                    return self.show_message(
+                        request, _('E-mail sent'), self.recovery_email_sent_message
+                    )
+                else:
+                    extra_message = self.recovery_cannot_login_message + ' ' + self.cannot_login_explanation
             else:
                 extra_message = self.recovery_not_found_message
         return self.render(request, self.recover_template, {
