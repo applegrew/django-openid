@@ -6,6 +6,7 @@ from openid.extensions import sreg
 from django_openid.models import DjangoOpenIDStore
 from django_openid import signed
 from django_openid.response import TemplateResponse
+from django.utils.translation import ugettext_lazy
 
 class Provider(object):
     """
@@ -17,8 +18,10 @@ class Provider(object):
     error_template = 'django_openid/error.html'
     decide_template = 'django_openid/decide.html'
     
-    not_your_openid_message = 'You are signed in but do not own that OpenID'
-    invalid_decide_post_message = 'Your submission cannot be processed'
+    not_your_openid_message = ugettext_lazy('You are signed in but do not own '\
+                                            'that OpenID')
+    invalid_decide_post_message = ugettext_lazy('Your submission cannot be ' \
+                                                'processed')
     
     save_trusted_roots = False # If true, tries to persist trusted roots
     secret_key = None

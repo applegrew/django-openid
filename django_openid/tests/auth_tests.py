@@ -9,6 +9,8 @@ from django_openid import signed
 
 from django.contrib.auth.models import User
 from django.utils.decorators import decorator_from_middleware
+
+from base import TestCaseBase
 from request_factory import RequestFactory
 from openid_mocks import *
 
@@ -16,7 +18,7 @@ from openid.consumer import consumer as janrain_consumer
 
 rf = RequestFactory()
 
-class AuthTestBase(TestCase):
+class AuthTestBase(TestCaseBase):
     urls = 'django_openid.tests.auth_test_urls'
     
     def setUp(self):
@@ -28,6 +30,8 @@ class AuthTestBase(TestCase):
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django_openid.registration.RegistrationConsumer',
         )
+        
+        super(AuthTestBase, self).setUp()
         
         # Create user accounts associated with OpenIDs
         self.no_openids = User.objects.create(
@@ -44,6 +48,7 @@ class AuthTestBase(TestCase):
     
     def tearDown(self):
         settings.MIDDLEWARE_CLASSES = self.old_middleware
+        super(AuthTestBase, self).tearDown()
 
 class AuthTest(AuthTestBase):
     
@@ -104,10 +109,12 @@ class RegistrationTest(AuthTestBase):
         # Now extract and click that link
         msg = mail.outbox[0]
         self.assertEqual(msg.to, [u'test@example.com'])
+        link_prefix = 'http://testserver'
         link = [
             l.strip() for l in msg.body.splitlines()
-            if l.startswith('http://testserver/')
+            if l.startswith(link_prefix)
         ][0]
+        link = link.replace(link_prefix, '')
         response = self.client.get(link)
         self.assertEqual(
             response.template_name, 'django_openid/register_complete.html'
@@ -142,10 +149,13 @@ class AccountRecoveryTest(AuthTestBase):
         self.assertEqual(len(mail.outbox), 1)
         msg = mail.outbox[0]
         self.assertEqual(msg.to, [u'noopenids@example.com'])
+        
+        link_prefix = 'http://testserver'
         link = [
             l.strip() for l in msg.body.splitlines()
-            if l.startswith('http://testserver/')
+            if l.startswith(link_prefix)
         ][0]
+        link = link.replace(link_prefix, '')
         
         # Tampering with the link should cause it to fail
         bits = link.split('.')
@@ -162,5 +172,4 @@ class AccountRecoveryTest(AuthTestBase):
             response.template_name, 'django_openid/recovery_complete.html'
         )
         self.assertEqual(response._request.user.username, 'noopenids')
-
 

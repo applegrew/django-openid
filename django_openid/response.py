@@ -74,6 +74,7 @@ class TemplateResponse(SimpleTemplateResponse):
         super(TemplateResponse, self).__init__(
             template, context, *args, **kwargs
         )
+        str(self)
     
     def resolve_context(self, context):
         if isinstance(context, Context):

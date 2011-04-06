@@ -1,10 +1,13 @@
 {% extends base_template %}
 
-{% block title %}Error using OpenID{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Account error" %}{% endblock %}
 
 {% block content %}
-<h1>Error using OpenID</h1>
 
-<p>{{ message }}</p>
+<h1>{% trans "Account error" %}</h1>
+
+<p class="message error">{{ message }}</p>
 
 {% endblock %}

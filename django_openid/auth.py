@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect as Redirect, Http404
 from django_openid import consumer, signed
 from django_openid.utils import hex_to_int, int_to_hex
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
+from django.utils.translation import ugettext_lazy, ugettext as _
 
-import hashlib, datetime
+import datetime
 from urlparse import urljoin
 
 # TODO: prevent multiple associations of same OpenID
@@ -17,7 +19,7 @@ class AuthConsumer(consumer.SessionConsumer):
     relies on sessions already.
     """
     after_login_redirect_url = '/'
-    
+
     associations_template = 'django_openid/associations.html'
     login_plus_password_template = 'django_openid/login_plus_password.html'
     recover_template = 'django_openid/recover.html'
@@ -27,46 +29,50 @@ class AuthConsumer(consumer.SessionConsumer):
     recovery_email_template = 'django_openid/recovery_email.txt'
     recovery_expired_template = 'django_openid/recovery_expired.html'
     recovery_complete_template = 'django_openid/recovery_complete.html'
-    
+
     recovery_email_from = None
-    recovery_email_subject = 'Recover your account'
-    
+    recovery_email_subject = ugettext_lazy('Recover your account')
+
     password_logins_enabled = True
     account_recovery_enabled = True
-    
-    need_authenticated_user_message = 'You need to sign in with an ' \
-        'existing user account to access this page.'
-    csrf_failed_message = 'Invalid submission'
-    associate_tampering_message = 'Invalid submission'
-    association_deleted_message = '%s has been deleted'
+
+    need_authenticated_user_message = ugettext_lazy('You need to sign in ' \
+        'with an existing user account to access this page.')
+    csrf_failed_message = ugettext_lazy('Invalid submission.')
+    associate_tampering_message = ugettext_lazy('Invalid submission.')
+    association_deleted_message = ugettext_lazy('%s has been deleted.')
     openid_now_associated_message = \
-        'The OpenID "%s" is now associated with your account.'
-    bad_password_message = 'Incorrect username or password'
-    invalid_token_message = 'Invalid token'
-    recovery_email_sent_message = 'Check your mail for further instructions'
-    recovery_not_found_message = 'No matching user was found'
-    recovery_multiple_found_message = 'Try entering your username instead'
-    r_user_not_found_message = 'That user account does not exist'
-    
+        ugettext_lazy('The OpenID "%s" is now associated with your account.')
+    bad_password_message = ugettext_lazy('Incorrect username or password.')
+    invalid_token_message = ugettext_lazy('Invalid token.')
+    recovery_email_sent_message = \
+        ugettext_lazy('Check your mail for further instructions.')
+    recovery_not_found_message = ugettext_lazy('No matching user was found.')
+    recovery_multiple_found_message = \
+        ugettext_lazy('Try entering your username instead.')
+    r_user_not_found_message = ugettext_lazy('That user account does not exist.')
+    recovery_cannot_login_message = _('That user account cannot be recovered.')
+    cannot_login_explanation = _('User account is probably inactive.') + ' ' + _('Please use your activation link or contact an administrator.')
+
     account_recovery_url = None
-    
+
     associate_salt = 'associate-salt'
     associate_delete_salt = 'associate-delete-salt'
     recovery_link_salt = 'recovery-link-salt'
     recovery_link_secret = None # If None, uses settings.SECRET_KEY
-    
+
     # For generating recovery URLs
     recovery_origin_date = datetime.date(2000, 1, 1)
     recovery_expires_after_days = 3 # Number of days recovery URL is valid for
-    
+
     def show_login(self, request, extra_message=None):
         if request.user.is_authenticated():
             return self.show_already_logged_in(request)
-        
+
         response = super(AuthConsumer, self).show_login(
             request, extra_message
         )
-        
+
         if self.password_logins_enabled:
             response.template_name = self.login_plus_password_template
             response.template_context.update({
@@ -74,11 +80,12 @@ class AuthConsumer(consumer.SessionConsumer):
                     self.account_recovery_url or (request.path + 'recover/')
                 ),
             })
+        response.force_bake()
         return response
-    
+
     def show_already_logged_in(self, request):
-        return self.render(request, self.already_logged_in_template) 
-    
+        return self.render(request, self.already_logged_in_template)
+
     def do_login(self, request, extra_message=None):
         if request.method == 'POST' and \
                 request.POST.get('username', '').strip():
@@ -89,34 +96,36 @@ class AuthConsumer(consumer.SessionConsumer):
             )
             if not user:
                 return self.show_login(request, self.bad_password_message)
+            elif not user.is_active:
+                return self.show_you_cannot_login(request)
             else:
                 self.log_in_user(request, user)
                 return self.on_login_complete(request, user, openid=None)
         else:
             return super(AuthConsumer, self).do_login(request, extra_message)
-    
+
     def lookup_openid(self, request, identity_url):
-        # Imports lives inside this method so User won't get imported if you 
+        # Imports lives inside this method so User won't get imported if you
         # over-ride this in your own sub-class and use something else.
         from django.contrib.auth.models import User
         return list(
             User.objects.filter(openids__openid = identity_url).distinct()
         )
-    
+
     def log_in_user(self, request, user):
         # Remember, openid might be None (after registration with none set)
         from django.contrib.auth import login
-        # Nasty but necessary - annotate user and pretend it was the regular 
+        # Nasty but necessary - annotate user and pretend it was the regular
         # auth backend. This is needed so django.contrib.auth.get_user works:
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-    
+
     def on_login_complete(self, request, user, openid=None):
         response = self.redirect_if_valid_next(request)
         if not response:
             response = Redirect(self.after_login_redirect_url)
         return response
-    
+
     def on_logged_in(self, request, openid, openid_response):
         # Do we recognise their OpenID?
         matches = self.lookup_openid(request, openid)
@@ -132,29 +141,33 @@ class AuthConsumer(consumer.SessionConsumer):
                 # Offer to associate this OpenID with their account
                 return self.show_associate(request, openid)
         if matches:
-            # If there's only one match, log them in as that user
-            if len(matches) == 1:
-                user = matches[0]
-                if self.user_can_login(request, user):
-                    self.log_in_user(request, user)
-                    return self.on_login_complete(request, user, openid)
-                else:
-                    # User is not allowed to log in for some other reason - 
-                    # for example, they have not yet validated their e-mail 
-                    # or they have been banned from the site.
-                    return self.show_you_cannot_login(request, user, openid)
-            # Otherwise, let them to pick which account they want to log in as
+            # Check which accounts are active
+            active_matches = []
+            for match in matches:
+                if self.user_can_login(request, match):
+                    active_matches.append(match)
+            if len(active_matches) == 0:
+                # User is not allowed to log in for some other reason -
+                # for example, they have not yet validated their e-mail
+                # or they have been banned from the site.
+                return self.show_you_cannot_login(request, openid)
+            elif len(active_matches) == 1:
+                # If there's only one match, log them in as that user
+                user = active_matches[0]
+                self.log_in_user(request, user)
+                return self.on_login_complete(request, user, openid)
             else:
-                return self.show_pick_account(request, openid)
+                # Otherwise, let them to pick which account they want to log in as
+                return self.show_pick_account(request, openid, active_matches)
         else:
             # We don't know anything about this openid
             return self.show_unknown_openid(request, openid)
-    
+
     def user_can_login(self, request, user):
         "Over-ride for things like user bans or account e-mail validation"
         return user.is_active
-    
-    def show_pick_account(self, request, openid):
+
+    def show_pick_account(self, request, openid, users):
         """
         The user's OpenID is associated with more than one account - ask them
         which one they would like to sign in as
@@ -162,15 +175,15 @@ class AuthConsumer(consumer.SessionConsumer):
         return self.render(request, self.pick_account_template, {
             'action': urljoin(request.path, '../pick/'),
             'openid': openid,
-            'users': self.lookup_openid(request, openid),
+            'users': users,
         })
-    
+
     def do_pick(self, request):
         # User MUST be logged in with an OpenID and it MUST be associated
-        # with the selected account. The error messages in here are a bit 
+        # with the selected account. The error messages in here are a bit
         # weird, unfortunately.
         if not request.openid:
-            return self.show_error(request, 'You should be logged in here')
+            return self.show_error(request, _('You should be logged in here'))
         users = self.lookup_openid(request, request.openid.openid)
         try:
             user_id = [
@@ -178,52 +191,45 @@ class AuthConsumer(consumer.SessionConsumer):
             ][0]
             user = [u for u in users if str(u.id) == user_id][0]
         except IndexError, e:
-            return self.show_error(request, "You didn't pick a valid user")
+            return self.show_error(request, _("You didn't pick a valid user"))
         # OK, log them in
         self.log_in_user(request, user)
         return self.on_login_complete(request, user, request.openid.openid)
-    
+
     def on_logged_out(self, request):
         # After logging out the OpenID, log out the user auth session too
         from django.contrib.auth import logout
         response = super(AuthConsumer, self).on_logged_out(request)
         logout(request)
         return response
-    
+
     def show_unknown_openid(self, request, openid):
         # This can be over-ridden to show a registration form
         return self.show_message(
-            request, 'Unknown OpenID', '%s is an unknown OpenID' % openid
+            request, _('Unknown OpenID'), _('%s is an unknown OpenID') % openid
         )
-    
-    def show_you_cannot_login(self, request, user, openid):
+
+    def show_you_cannot_login(self, request, openid = None):
         return self.show_message(
-            request, 'You cannot log in',
-            'You cannot log in with that account'
+            request, _('You cannot log in'),
+            _('You cannot log in with that account.') + self.cannot_login_explanation
         )
-    
+
     def show_associate(self, request, openid=None):
         "Screen that offers to associate an OpenID with a user's account"
         if not request.user.is_authenticated():
             return self.need_authenticated_user(request)
-        try:
-            next = signed.loads(
-                request.REQUEST.get('next', ''), extra_key=self.salt_next
-            )
-        except ValueError:
-            next = ''
         return self.render(request, self.show_associate_template, {
             'action': urljoin(request.path, '../associate/'),
             'user': request.user,
             'specific_openid': openid,
-            'next': next and request.REQUEST.get('next', '') or None,
             'openid_token': signed.dumps(
                # Use user.id as part of extra_key to prevent attackers from
                # creating their own openid_token for use in CSRF attack
                openid, extra_key = self.associate_salt + str(request.user.id)
             ),
         })
-    
+
     def do_associate(self, request):
         if request.method == 'POST':
             try:
@@ -237,20 +243,20 @@ class AuthConsumer(consumer.SessionConsumer):
             if not request.user.openids.filter(openid = openid):
                 request.user.openids.create(openid = openid)
             return self.show_associate_done(request, openid)
-            
+
         return self.show_error(request, 'Should POST to here')
-    
+
     def show_associate_done(self, request, openid):
         response = self.redirect_if_valid_next(request)
         if not response:
-            response = self.show_message(request, 'Associated', 
+            response = self.show_message(request, _('Associated'),
                 self.openid_now_associated_message % openid
             )
         return response
-    
+
     def need_authenticated_user(self, request):
         return self.show_error(request, self.need_authenticated_user_message)
-    
+
     def do_associations(self, request):
         "Interface for managing your account's associated OpenIDs"
         if not request.user.is_authenticated():
@@ -291,11 +297,12 @@ class AuthConsumer(consumer.SessionConsumer):
             'openids': openids,
             'user': request.user,
             'action': request.path,
+            'logo': self.logo_path or (request.path + '../logo/'),
             'message': message,
             'action_new': '../',
             'associate_next': self.sign_next(request.path),
         })
-    
+
     def do_recover(self, request, extra_message = None):
         if request.method == 'POST':
             submitted = request.POST.get('recover', '').strip()
@@ -311,35 +318,38 @@ class AuthConsumer(consumer.SessionConsumer):
                     else:
                         user = users[0]
             if user:
-                self.send_recovery_email(request, user)
-                return self.show_message(
-                    request, 'E-mail sent', self.recovery_email_sent_message
-                )
+                if self.user_can_login(request, user):
+                    self.send_recovery_email(request, user)
+                    return self.show_message(
+                        request, _('E-mail sent'), self.recovery_email_sent_message
+                    )
+                else:
+                    extra_message = self.recovery_cannot_login_message + ' ' + self.cannot_login_explanation
             else:
                 extra_message = self.recovery_not_found_message
         return self.render(request, self.recover_template, {
             'action': request.path,
             'message': extra_message,
         })
-    
+
     def lookup_users_by_email(self, email):
         from django.contrib.auth.models import User
         return list(User.objects.filter(email = email))
-    
+
     def lookup_user_by_username(self, username):
         from django.contrib.auth.models import User
         try:
             return User.objects.get(username = username)
         except User.DoesNotExist:
             return None
-    
+
     def lookup_user_by_id(self, id):
         from django.contrib.auth.models import User
         try:
             return User.objects.get(pk = id)
         except User.DoesNotExist:
             return None
-    
+
     def do_r(self, request, token = ''):
         if not token:
             # TODO: show a form where they can paste in their token?
@@ -360,7 +370,7 @@ class AuthConsumer(consumer.SessionConsumer):
         user = self.lookup_user_by_id(user_id)
         if not user: # Maybe the user was deleted?
             return self.show_error(request, r_user_not_found_message)
-        
+
         # Has the token expired?
         now_days = (datetime.date.today() - self.recovery_origin_date).days
         if (now_days - days) > self.recovery_expires_after_days:
@@ -368,7 +378,7 @@ class AuthConsumer(consumer.SessionConsumer):
                 'days': self.recovery_expires_after_days,
                 'recover_url': urljoin(request.path, '../../recover/'),
             })
-        
+
         # Token is valid! Log them in as that user and show the recovery page
         self.log_in_user(request, user)
         return self.render(request, self.recovery_complete_template, {
@@ -377,7 +387,7 @@ class AuthConsumer(consumer.SessionConsumer):
             'user': user,
         })
     do_r.urlregex = '^r/([^/]+)/$'
-    
+
     def generate_recovery_code(self, user):
         # Code is {hex-days}.{hex-userid}.{signature}
         days = int_to_hex(
@@ -387,7 +397,7 @@ class AuthConsumer(consumer.SessionConsumer):
         return signed.sign(token, key = (
             self.recovery_link_secret or settings.SECRET_KEY
         ) + self.recovery_link_salt)
-    
+
     def send_recovery_email(self, request, user):
         code = self.generate_recovery_code(user)
         path = urljoin(request.path, '../r/%s/' % code)
@@ -395,7 +405,7 @@ class AuthConsumer(consumer.SessionConsumer):
         email_body = self.render(request, self.recovery_email_template, {
             'url': url,
             'code': code,
-            'user': user,
+            'theuser': user,
         }).content
         send_mail(
             subject = self.recovery_email_subject,
@@ -409,7 +419,7 @@ class AuthConsumer(consumer.SessionConsumer):
 def make_display_login_form_with_openid(bind_to_me, openid_path):
     "openid_path is the path the OpenID login should submit to, e.g. /openid/"
     from django.contrib.admin.sites import AdminSite
-    def display_login_form(request, error_message='', 
+    def display_login_form(request, error_message='',
             extra_context=None):
         extra_context = extra_context or {}
         extra_context['openid_path'] = openid_path

@@ -3,6 +3,7 @@ from django.http import Http404
 from django_openid.consumer import Consumer
 from django_openid import signed
 
+from base import TestCaseBase
 from request_factory import RequestFactory
 from openid_mocks import *
 
@@ -10,7 +11,7 @@ from openid.consumer import consumer as janrain_consumer
 
 rf = RequestFactory()
 
-class ConsumerTest(TestCase):
+class ConsumerTest(TestCaseBase):
     
     def testBadMethod(self):
         "Non existent methods should result in a 404"
@@ -110,7 +111,7 @@ class ConsumerTest(TestCase):
         response = openid_consumer(get, 'logo/')
         self.assert_('image/gif' in response['Content-Type'])
 
-class SessionConsumerTest(TestCase):
+class SessionConsumerTest(TestCaseBase):
     
     def login(self):
         openid_consumer = MySessionConsumer()
@@ -142,7 +143,7 @@ class SessionConsumerTest(TestCase):
         self.assertEqual(response['Location'], '/')
         self.assertEqual(len(request.session['openids']), 0)
 
-class CookieConsumerTest(TestCase):
+class CookieConsumerTest(TestCaseBase):
     
     def login(self):
         openid_consumer = MyCookieConsumer()

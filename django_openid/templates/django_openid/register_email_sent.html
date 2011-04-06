@@ -1,7 +1,13 @@
 {% extends base_template %}
 
-{% block title %}Check your e-mail{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Check your e-mail" %}{% endblock %}
 
 {% block content %}
-<p>We have e-mailed you a link to confirm your account.</p>
+
+<h1>{% trans "Check your e-mail" %}</h1>
+
+<p>{% trans "We have e-mailed you a link to confirm your account." %}</p>
+
 {% endblock %}

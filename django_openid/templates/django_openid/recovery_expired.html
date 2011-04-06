@@ -1,8 +1,17 @@
 {% extends base_template %}
 
-{% block title %}Token has expired{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Token has expired" %}{% endblock %}
 
 {% block content %}
-<p>Your account recovery token has expired (tokens are only valid for {{ days }} day{{ days|pluralize }}). Try <a href="{{ recover_url }}">requesting another one</a>.</p>
+
+<p>
+    {% blocktrans count days as counter %}
+        Your account recovery token has expired (tokens are only valid for one day). Try <a href="{{ recover_url }}">requesting another one</a>.
+        {% plural %}
+        Your account recovery token has expired (tokens are only valid for {{ days }} day). Try <a href="{{ recover_url }}">requesting another one</a>.
+    {% endblocktrans %}
+</p>
 
 {% endblock %}
