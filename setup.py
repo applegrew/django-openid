@@ -20,7 +20,8 @@ setup(
     package_data = {
         'django_openid': [
             'docs/intro.txt',
-            'templates/django_openid/*.html'
+            'templates/django_openid/*.html',
+            'templates/django_openid/*.txt',
         ],
         'django_openidconsumer': [
             'templates/*.html',
