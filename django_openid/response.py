@@ -26,7 +26,7 @@ class SimpleTemplateResponse(HttpResponse):
         if isinstance(context, Context):
             return context
         else:
-            return Context(context)
+            return RequestContext(context)
     
     def render(self):
         template = self.resolve_template(self.template_name)
