@@ -19,7 +19,7 @@ from openid.yadis import xri
 from django_openid.models import DjangoOpenIDStore
 from django_openid.utils import OpenID, Router
 from django_openid import signed
-from django_openid.response import TemplateResponse
+from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy, ugettext as _
 
 class SessionPersist(object):
