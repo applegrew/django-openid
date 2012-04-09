@@ -75,12 +75,13 @@ class AuthConsumer(consumer.SessionConsumer):
 
         if self.password_logins_enabled:
             response.template_name = self.login_plus_password_template
-            response.template_context.update({
+            response.context_data.update({
                 'account_recovery': self.account_recovery_enabled and (
                     self.account_recovery_url or (request.path + 'recover/')
                 ),
             })
-        response.force_bake()
+        if response.is_rendered:
+            response.content = response.rendered_content #Already rendered so this is the way to force a re-render.
         return response
 
     def show_already_logged_in(self, request):
